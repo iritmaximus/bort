@@ -1,5 +1,5 @@
 import express from "express";
-import { queryStop, IStop } from "./query";
+import { queryStopById } from "./query";
 
 
 const PORT: Number = 5000;
@@ -12,9 +12,24 @@ api.get("/", (_req: express.Request, res: express.Response) => {
     res.send("Moi");
 });
 
-api.get("/stops", async (_req, res) => {
-    const stop: IStop = await queryStop(10);
-    res.send(stop);
+api.get("/bus", async (_req, res) => {
+    const busStop = await queryStopById("HSL:1220106");
+    if (busStop) {
+        res.send(busStop);
+        return;
+    }
+    res.send({"message": "No stops found"});
+    return;
+});
+
+api.get("/tram", async (_req, res) => {
+    const tramStop = await queryStopById("HSL:1220419");
+    if (tramStop) {
+        res.send(tramStop);
+        return;
+    }
+    res.send({"message": "No stops found"});
+    return;
 });
 
 api.listen(PORT, () => {

@@ -1,29 +1,14 @@
+import config from "./utils/config";
+import { IStop, parseStop } from "./controllers/stop";
 
 
-const API_KEY: string = "25e625c8546141aa83b21b9ba94d4847";
 const API_URL_BASE: string = "https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql";
-const API_URL: string = `${API_URL_BASE}?digitransit-subscription-key=${API_KEY}`;
-
-export interface IStop {
-    id: number;
-    name: string;
-}
+const API_URL: string = `${API_URL_BASE}?digitransit-subscription-key=${config.API_KEY}`;
 
 
-export const queryStop = async (stopId: number): Promise<IStop> => {
-    console.log("Querying the HSL-api for stop", stopId);
-    console.log(API_URL);
 
-    const query: string = `
-      {
-        stops(name: "mäkelänrinne") {
-          gtfsId
-          name
-          code
-          lat
-          lon
-        }
-      }`
+const queryDigitransit = async (query: string) => {
+    console.log("Querying the HSL-api with query", query);
 
     const response = await fetch(API_URL, {
         method: "post",
@@ -32,15 +17,53 @@ export const queryStop = async (stopId: number): Promise<IStop> => {
         },
         body: JSON.stringify({ query })
     });
+
     const parsed_res = await response.json();
-    console.log(parsed_res);
+    return parsed_res.data;
+}
 
 
+export const queryStopById = async (stopId: string): Promise<IStop | undefined> => {
+    console.info("Querying the HSL-api for stop", stopId);
+    console.debug(API_URL);
 
+    const query: string = `
+    {
+      stop(id: "${stopId}") {
+        gtfsId
+        name
+        code
+        patterns {
+          code
+          directionId
+          headsign
+          route {
+            gtfsId
+            shortName
+            longName
+            mode
+          }
+        }
+      }
+    }`
 
-    const stop: IStop = {
-        id: stopId,
-        name: "TOOO"
+    const response = await queryDigitransit(query);
+    if (!response) {
+      console.error("No response from API");
+      return;
     }
-    return stop;
+
+    if (!response.stop || !response.stop.patterns) {
+      console.error("Incorrect response from API", response);
+      return;
+    }
+
+    const stop: IStop | undefined = parseStop(response.stop);
+    if (stop) {
+        console.debug("Parsed stop:", stop);
+        return stop;
+    }
+
+    console.error("Failed parsing stop", stop);
+    return;
 };
