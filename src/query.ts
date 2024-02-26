@@ -8,7 +8,8 @@ const API_URL: string = `${API_URL_BASE}?digitransit-subscription-key=${config.A
 
 
 const queryDigitransit = async (query: string) => {
-    console.log("Querying the HSL-api with query", query);
+    console.info("Querying the HSL-api with query", query);
+    console.debug(API_URL);
 
     const response = await fetch(API_URL, {
         method: "post",
@@ -23,7 +24,44 @@ const queryDigitransit = async (query: string) => {
 }
 
 
-export const queryStopById = async (stopId: string): Promise<IStop | undefined> => {
+
+export const queryTripsFromStopById = async (stopId: string): Promise<IStop | undefined> => {
+    console.debug("Querying the HSL-api for stop", stopId);
+    const query: string = `
+    {
+      stop(id: "HSL:1220106") {
+        gtfsId
+        name
+        code
+          stoptimesWithoutPatterns (numberOfDepartures: 5) {
+          scheduledDeparture
+          realtimeDeparture
+          departureDelay
+          trip {
+            tripHeadsign
+            route {
+              gtfsId
+              longName
+              shortName
+              mode
+            }
+          }
+        }
+      }  
+    }`
+
+    const response = await queryDigitransit(query);
+    console.info(response);
+
+    const stop = parseStop(response.stop);
+    if (stop) {
+        return stop;
+    }
+    console.error("Parse returned nothing");
+    return response;
+};
+
+export const queryRoutesAtStopById = async (stopId: string): Promise<IStop | undefined> => {
     console.info("Querying the HSL-api for stop", stopId);
     console.debug(API_URL);
 

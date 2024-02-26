@@ -1,11 +1,19 @@
-import { IResponseRoute, IRoute, parseRoute } from "./route";
+import { IResponseTrip, ITrip, parseTrip } from "./trip";
+
+
+export interface IResponseStop {
+    gtfsId: string;
+    name: string;
+    code: string;
+    stoptimesWithoutPatterns: IResponseTrip[];
+}
 
 
 export interface IStop {
     gtfsId: string;
     name: string;
     code: string;
-    routes: IRoute[];
+    trips: ITrip[];
 }
 
 export const isStop = (obj: any): obj is IStop => {
@@ -20,22 +28,36 @@ export const isStop = (obj: any): obj is IStop => {
     return false;
 }
 
+export const isResponseStop = (obj: any): obj is IResponseStop => {
+    if (
+        "gtfsId" in obj && 
+        "name" in obj && 
+        "code" in obj && 
+        "stoptimesWithoutPatterns" in obj
+    ) {
+        return true;
+    }
+    return false;
+}
+
 export const parseStop = (obj: any): IStop | undefined => {
-    if (!obj.patterns) {
-        console.error("Incorrect query response, no patterns", obj);
+    if (!isResponseStop(obj)) {
+        console.error("Incorrect response from query", obj);
         return;
     }
-    const patterns: IResponseRoute[] = obj.patterns;
-    const routes: IRoute[] = patterns.map(route => {
-        return parseRoute(route);
-    }).filter((route): route is IRoute => route != null);
+
+    const departures: IResponseTrip[] = obj.stoptimesWithoutPatterns;
+    const trips = departures.map(tripData => {
+        return parseTrip(tripData);
+    }).filter((trip): trip is ITrip => trip != null);
+
 
     // TODO all values are not typechecked
     const stop: IStop = {
         gtfsId: obj.gtfsId,
         name: obj.name,
         code: obj.code,
-        routes: routes
+        trips: trips
     }
     return stop;
 }

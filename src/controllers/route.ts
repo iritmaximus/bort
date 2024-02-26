@@ -1,47 +1,30 @@
 export interface IResponseRoute {
-    code: string;
-    directionId: number;
-    headsign: string;
-    route: {
-        gtfsId: string;
-        shortName: string;
-        longName: string;
-        mode: string;
-    }
+    gtfsId: string;
+    shortName: string;
+    longName: string;
+    mode: string;
 }
 
 export interface IRoute {
     gtfsId: string;
-    number: string;
+    lineNumber: string;
     name: string;
-    direction: number;
-    headsign: string;
     mode: string;
+    direction?: number;
+    headsign?: string;
 }
 
 
-
-
 export const parseRoute = (obj: IResponseRoute): IRoute | undefined => {
-    if (!("route" in obj)) {
-        console.error("No route in parsed object");
-        return;
-    }
-
-    const routeObj = obj.route;
-    const gtfsId = routeObj.gtfsId;
-    const number = routeObj.shortName;
-    const name = routeObj.longName;
-    const direction = obj.directionId;
-    const headsign = obj.headsign;
-    const mode = routeObj.mode;
+    const gtfsId = obj.gtfsId;
+    const lineNumber = obj.shortName;
+    const name = obj.longName;
+    const mode = obj.mode;
 
     const route: IRoute = {
         gtfsId,
-        number,
+        lineNumber,
         name,
-        direction,
-        headsign,
         mode
     }
 
@@ -54,8 +37,6 @@ export const isRoute = (obj: any): obj is IRoute => {
         "code" in obj && 
         "number" in obj && 
         "name" in obj && 
-        "direction" in obj && 
-        "headsign" in obj && 
         "mode" in obj
     ) { 
         return true;
