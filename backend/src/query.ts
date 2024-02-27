@@ -29,7 +29,7 @@ export const queryTripsFromStopById = async (stopId: string): Promise<IStop | un
     console.debug("Querying the HSL-api for stop", stopId);
     const query: string = `
     {
-      stop(id: "HSL:1220106") {
+      stop(id: "${stopId}") {
         gtfsId
         name
         code
