@@ -1,4 +1,6 @@
 import express from "express";
+import cors from "cors";
+
 import { queryTripsFromStopById } from "./query";
 
 
@@ -6,6 +8,8 @@ const PORT: Number = 5000;
 
 
 const api = express();
+
+api.use(cors());
 
 
 api.get("/", (_req: express.Request, res: express.Response) => {
