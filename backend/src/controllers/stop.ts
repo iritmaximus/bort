@@ -5,22 +5,26 @@ export interface IResponseStop {
     gtfsId: string;
     name: string;
     code: string;
+    id: string;
     stoptimesWithoutPatterns: IResponseTrip[];
 }
 
 
 export interface IStop {
+    id: string;
     gtfsId: string;
     name: string;
     code: string;
     trips: ITrip[];
+    walktime_m?: number;
 }
 
 export const isStop = (obj: any): obj is IStop => {
     if (
-        "name" in obj && 
-        "gtfsId" in obj && 
-        "code" in obj && 
+        "id" in obj &&
+        "name" in obj &&
+        "gtfsId" in obj &&
+        "code" in obj &&
         "routes" in obj
     ) {
         return true;
@@ -30,9 +34,10 @@ export const isStop = (obj: any): obj is IStop => {
 
 export const isResponseStop = (obj: any): obj is IResponseStop => {
     if (
-        "gtfsId" in obj && 
-        "name" in obj && 
-        "code" in obj && 
+        "id" in obj &&
+        "gtfsId" in obj &&
+        "name" in obj &&
+        "code" in obj &&
         "stoptimesWithoutPatterns" in obj
     ) {
         return true;
@@ -54,6 +59,7 @@ export const parseStop = (obj: any): IStop | undefined => {
 
     // TODO all values are not typechecked
     const stop: IStop = {
+        id: obj.id,
         gtfsId: obj.gtfsId,
         name: obj.name,
         code: obj.code,

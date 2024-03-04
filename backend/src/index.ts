@@ -17,7 +17,7 @@ api.get("/", (_req: express.Request, res: express.Response) => {
 });
 
 api.get("/bus", async (_req, res) => {
-    const busStop = await queryTripsFromStopById("HSL:1220106");
+    const busStop = await queryTripsFromStopById("HSL:1220108");
     if (busStop) {
         res.send(busStop);
         return;

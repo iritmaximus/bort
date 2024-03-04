@@ -30,6 +30,7 @@ export const queryTripsFromStopById = async (stopId: string): Promise<IStop | un
     const query: string = `
     {
       stop(id: "${stopId}") {
+        id
         gtfsId
         name
         code
@@ -38,8 +39,10 @@ export const queryTripsFromStopById = async (stopId: string): Promise<IStop | un
           realtimeDeparture
           departureDelay
           trip {
+            id
             tripHeadsign
             route {
+              id
               gtfsId
               longName
               shortName
@@ -47,7 +50,7 @@ export const queryTripsFromStopById = async (stopId: string): Promise<IStop | un
             }
           }
         }
-      }  
+      }
     }`
 
     const response = await queryDigitransit(query);
