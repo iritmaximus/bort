@@ -21,11 +21,13 @@ export const Trip = ({ trip }: TripProps) => {
     const walktime_m = trip.walktime_m ? trip.walktime_m : 0;
 
     useEffect(() => {
-        setDepartureFromNow(Math.round((departure.getTime() - departure.getTimezoneOffset() - Date.now()) / 60_000));
+        const timezoneOffset = departure.getTimezoneOffset() * 60_000;
+        setDepartureFromNow(Math.round((departure.getTime() - timezoneOffset - Date.now()) / 60_000));
     }, []);
 
     setInterval(() => {
-        setDepartureFromNow(Math.round((departure.getTime() - departure.getTimezoneOffset() - Date.now()) / 60_000));
+        const timezoneOffset = departure.getTimezoneOffset() * 60_000;
+        setDepartureFromNow(Math.round((departure.getTime() - timezoneOffset - Date.now()) / 60_000));
     }, 5000);
 
 
