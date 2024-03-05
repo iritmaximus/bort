@@ -19,11 +19,14 @@ export const Trip = ({ trip }: TripProps) => {
     const departureMinute = minutes > 9 ? minutes : "0" + minutes;
 
     const walktime_m = trip.walktime_m ? trip.walktime_m : 0;
+
     useEffect(() => {
+        console.log(departure.getTimezoneOffset());
         setDepartureFromNow(Math.round((departure.getTime() - Date.now()) / 60_000));
     }, []);
 
     setInterval(() => {
+        console.log(departure.getTimezoneOffset());
         setDepartureFromNow(Math.round((departure.getTime() - Date.now()) / 60_000));
     }, 5000);
 
