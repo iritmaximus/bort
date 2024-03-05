@@ -22,12 +22,12 @@ export const Trip = ({ trip }: TripProps) => {
 
     useEffect(() => {
         const timezoneOffset = departure.getTimezoneOffset() * 60_000;
-        setDepartureFromNow(Math.round((departure.getTime() - timezoneOffset - Date.now()) / 60_000));
+        setDepartureFromNow(Math.round((departure.getTime() + timezoneOffset - Date.now()) / 60_000));
     }, []);
 
     setInterval(() => {
         const timezoneOffset = departure.getTimezoneOffset() * 60_000;
-        setDepartureFromNow(Math.round((departure.getTime() - timezoneOffset - Date.now()) / 60_000));
+        setDepartureFromNow(Math.round((departure.getTime() + timezoneOffset - Date.now()) / 60_000));
     }, 5000);
 
 
