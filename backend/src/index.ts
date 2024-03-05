@@ -4,7 +4,7 @@ import cors from "cors";
 import { queryTripsFromStopById } from "./query";
 
 
-const PORT: number = 5000;
+const PORT: number = 5005;
 
 
 const api = express();

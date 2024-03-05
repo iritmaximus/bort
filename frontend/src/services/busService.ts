@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:5000";
+const baseUrl = "http://localhost:5005";
 
 export const getTimes = async () => {
     const response = await fetch(baseUrl + "/bus");
