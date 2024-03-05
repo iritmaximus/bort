@@ -28,4 +28,4 @@ RUN yarn install --production --frozen-lockfile
 COPY --from=builder /usr/src/app/dist ./dist
 
 EXPOSE 8080
-CMD [ "yarn", "http-server", "./dist/index.html", "-p", "8080" ]
+CMD [ "yarn", "serve", "-s", "./dist", "-l", "8080" ]
