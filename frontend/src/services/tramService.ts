@@ -1,4 +1,5 @@
-const baseUrl = "http://localhost:5005";
+import { baseUrl } from "../utils/config";
+
 
 export const getTimes = async () => {
     const response = await fetch(baseUrl + "/tram");
