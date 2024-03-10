@@ -30,6 +30,6 @@ RUN yarn install --production --frozen-lockfile
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/bin/dumb-init /usr/bin/dumb-init
 
-EXPOSE 8080
+EXPOSE 5005
 ENTRYPOINT [ "dumb-init", "--" ]
 CMD [ "node", "dist/index.js" ]
