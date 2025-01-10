@@ -9,7 +9,7 @@ Easiest way to run these applications is by using `docker compose`. The app can 
 
 ## Testing
 
-Overrated... :D
+Not yet implemented.
 
 ## Roadmap
 
